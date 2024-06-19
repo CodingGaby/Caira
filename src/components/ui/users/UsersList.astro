@@ -1,0 +1,27 @@
+---
+import { db } from "astro:db";
+import UserCard from "./UserCard.astro";
+import { Users } from "astro:db";
+import { formatDate } from "@functions/formatDate";
+import type { User } from "@customTypes/userType";
+import { removeUserById } from "@functions/removeUserById"
+
+const session = Astro.cookies.get('userSes')
+const userId = session?.json().id;
+
+// Asegurarse de que el id es del tipo correcto (UUID)
+if (typeof userId !== "string") {
+  throw new Error("El id debe ser una cadena de texto");
+}
+
+const friends = await db.select().from(Users) as User[]
+const updatedFriends = removeUserById(friends, userId);
+---
+
+<section>
+  {
+    updatedFriends.map((friend: User) => (
+      <UserCard userName={`${friend.firstName} ${friend.lastName}`} date={formatDate(friend.createdAt)} ppUrl={friend.profilePhotoURL} />
+    ))
+  }
+</section>

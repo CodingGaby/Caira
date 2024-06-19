@@ -1,0 +1,38 @@
+---
+import { capitalizeFstLetter } from '@functions/capitalizeFstLetter';
+import type { InputType } from '@customTypes/InputType';
+
+interface Props {
+	name: string;
+	title?: string;
+  type: InputType;
+  isRequired: boolean;
+  placeholder?: string
+  value?: string | number
+
+}
+
+let capitalizedTitle : string = "";
+const { title, type, placeholder, isRequired, name, value } = Astro.props;
+
+if (title){
+  capitalizedTitle = capitalizeFstLetter(title);
+}
+---
+
+<div class="relative mb-6 max-w-[450px]">
+  {
+    isRequired 
+    ? <input type={type} id={name} placeholder={placeholder} name={name} required value={value} class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-gray-300 border appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
+    : <input type={type} id={name} placeholder={placeholder} name={name} value={value} class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-gray-300 border appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
+  
+  }
+  <label for={name} class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+    {
+      capitalizedTitle.length > 0 
+        ? capitalizedTitle
+        : <slot/>
+    }
+  </label>
+</div>
+

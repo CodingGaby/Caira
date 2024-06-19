@@ -1,0 +1,21 @@
+---
+import Save from '../icons/Save.astro';
+
+// Destructure the properties from Astro.props
+const { url } = Astro.props;
+
+// Define TypeScript interface for the properties
+interface Props {
+  url: string;
+  name?: string;
+}
+---
+
+<a
+  id={url === "/" ? "home" : url.replace("/", "")}
+  href={url}
+  data-astro-prefetch
+  class="rounded-lg text-base font-medium text-white outline-none ring-zinc-500 hover:text-[#2563EB] focus-visible:ring md:py-3 md:text-sm 2xl:text-base"
+>
+  <p><Save/></p>
+</a>

@@ -1,0 +1,24 @@
+---
+import { Articles } from "astro:db";
+import { db } from "astro:db";
+import SavedArticle from "./SavedArticle.astro";
+import type { ArticleType } from "@customTypes/ArticleType";
+
+const articles = await db.select().from(Articles) as ArticleType[]
+
+
+---
+<section>
+  {
+    articles.map((article: ArticleType) => (
+      <SavedArticle 
+        id={article.id} 
+        title={article.title} 
+        resume={article.resume} 
+        createdAt={article.createdAt} 
+        authors={article.authors} 
+        imageURL={article.imageURL || undefined} 
+      />
+    ))
+  }
+</section>

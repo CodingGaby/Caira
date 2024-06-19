@@ -1,0 +1,63 @@
+---
+import ArticleBttn from "@buttons/ArticleBttn.astro";
+import type { Author, Authors } from "@customTypes/AuthorType";
+import AuthorBadge from "./AuthorBadge.astro";
+
+interface Props {
+	id: string,
+  imageURL?: string,
+  title: string,
+  resume: string,
+  createdAt: Date
+  authors: Authors
+}
+
+
+const { title, imageURL, resume, authors, id } = Astro.props;
+
+let authorsList = authors.authorsList;
+
+---
+<a href={`/article/${id}`} class="flex flex-col bg-white text-black rounded-lg p-8 shadow-lg hover:shadow-xl hover:transform 
+  hover:scale-105 duration-300 my-8">
+  <article class="grid grid-cols-5 grid-rows-5 gap-4">
+    <div class="col-span-3 row-span-4">
+      <h1 class="text-xl font-bold text-[#2563EB] leading-none">{title}</h1>
+      <hr class="border my-2">
+      <p>{resume}</p>
+      
+    </div>
+    <div class="col-span-2 row-span-5 col-start-4">
+      <div class="grid grid-cols-2 grid-rows-1 gap-4">
+        {imageURL ? (
+          <img
+            class="aspect-[9/16] min-w-full"
+            src={imageURL}
+            alt={`${title} cover`}
+            width={126}
+            height={155}
+            loading="eager"
+          />
+        ) : (
+          <p></p>
+        )}
+        <ArticleBttn />
+      </div>
+    </div>
+    <div class="col-span-3 row-start-5">
+      {
+        authorsList.map((author: Author) => (
+          <AuthorBadge autorID={author.id} autorName={author.name}/>
+        ))
+      }
+    </div>
+  </article>
+</a>
+
+
+<style>
+  h1 {
+		line-height: 1;
+		text-align: left;
+	}
+</style>

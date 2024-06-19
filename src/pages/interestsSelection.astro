@@ -1,0 +1,30 @@
+---
+import Continue from "@components/ui/buttons/Continue.astro";
+import Layout from "src/layouts/Layout.astro";
+---
+
+<Layout title="Select your interests">
+  <div class="flex justify-center flex-col mt-[150px]">
+    <div class="flex items-center justify-center flex-col my-10">
+      <h1>Select your interests</h1>    
+    </div>
+  
+    <div class='grid grid-cols-3 gap-x-2 gap-y-3 grid-flow-row-dense'>
+      <div class='bg-red-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-orange-500 rounded-lg shadow-xl min-h-[50px] col-span-3' />
+      <div class='bg-yellow-500 rounded-lg shadow-xl min-h-[50px] row-span-2 col-span-2' />
+      <div class='bg-green-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-teal-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-blue-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-indigo-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-purple-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-pink-500 rounded-lg shadow-xl min-h-[50px]' />
+      <div class='bg-slate-500 rounded-lg shadow-xl min-h-[50px]' />
+    </div>
+    
+    <div class="w-[150px]">
+
+      <Continue title="Continue" rute="/"/>
+    </div>
+  </div>
+</Layout>

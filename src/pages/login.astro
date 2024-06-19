@@ -1,0 +1,114 @@
+---
+import Input from "@components/ui/forms/Input.astro"
+import Form from "../components/ui/forms/Form.astro"
+import Layout from "../layouts/Layout.astro"
+import Facts from "@components/ui/Facts.astro"
+import type { InputFieldArr } from "@customTypes/InputType";
+import { db, isDbError } from "astro:db";
+import { Users } from "astro:db";
+import { eq } from "astro:db";
+
+
+const session = Astro.cookies.get('userSes')
+
+if (session) {
+	Astro.cookies.delete('userSes')
+	return Astro.redirect('/');
+}
+
+if (Astro.request.method === 'POST') {
+
+	// Analizar datos de formulario
+  const formData = await Astro.request.formData();
+	
+  const enrollment = formData.get('enrollment');
+  const passw = formData.get('passw');
+
+	//TODO: Do a better UI/UX for register
+	if (typeof passw === 'string' && typeof enrollment === "string") {
+			// Insert data from the form to the User and upload it to the DB
+			let enrollmentNumber: number = parseInt(enrollment, 10)
+
+			try {
+				const userSession = await db
+					.select()
+					.from(Users)
+					.where(eq(Users.enrollment, enrollmentNumber));
+					
+				let userInfo = {
+					id: userSession[0].id,
+					enrollment: userSession[0].enrollment,
+					isAdmin: userSession[0].isAdmin
+				}
+
+				if (userSession[0].passwrd === passw){
+					Astro.cookies.set('userSes', userInfo)
+
+					if (userSession[0].isAdmin) return Astro.redirect('/register');
+					else return Astro.redirect('/interestsSelection');
+  			}
+			} catch (e) {
+				if (isDbError(e)) {
+					console.error(`No se puede logear un usuario con nombre ${enrollment}\n\n${e.message}`);
+    		} else {
+					console.error('Se ha producido un error inesperado');
+				}
+			}
+		}
+	return Astro.redirect("/")
+}
+
+
+const inputs: InputFieldArr[] = [
+	{
+		name: "enrollment",
+		label: "# Enrollment",
+		type: "number",
+		isRequired: true,
+		placeholder: "20106647"
+	},
+	{
+		name: "passw",
+		label: "Password",
+		type: "password",
+		isRequired: true,
+		placeholder: "123456"
+	}
+];
+
+---
+
+<Layout title="Login">
+	<div class="flex items-center justify-center flex-col mt-10">
+		<h1 class="mb-8">Login</h1>
+		<Form btnTitle='Register'>
+			{
+				inputs.map((inp) => (
+					<Input name={inp.name} type={inp.type} isRequired={true} placeholder={inp.placeholder}>
+						{inp.label}
+					</Input>
+				))
+			}
+		</Form>
+		<Facts/>
+	</div>
+</Layout>
+
+<style>
+  	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+  	h1 {
+    color: #020917;
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+	}
+</style>

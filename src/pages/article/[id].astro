@@ -1,0 +1,51 @@
+---
+import { eq } from "astro:db";
+import { Articles } from "astro:db";
+import { db } from "astro:db";
+import Layout from "src/layouts/Layout.astro";
+import { formatDate } from '@functions/formatDate';
+import type { Author } from '@customTypes/AuthorType';
+import type { ArticleType } from '@customTypes/ArticleType';
+import DateBadge from "@components/ui/articles/DateBadge.astro";
+import AuthorBadge from "@components/ui/articles/AuthorBadge.astro";
+
+
+const { id } = Astro.params;
+let date = "Unknown...";
+let authorsList : Author[];
+
+// Asegurarse de que el id es del tipo correcto (UUID)
+if (typeof id !== "string") {
+  throw new Error("El id debe ser una cadena de texto");
+}
+
+const article = await db
+  .select()
+  .from(Articles)
+  .where(eq(Articles.id, id)) as ArticleType[]
+
+const { title, content, createdAt, authors } = article[0]
+
+authorsList = authors.authorsList
+
+if (createdAt) date = formatDate(createdAt);
+---
+<Layout title={`${title} | `}>
+  <article class="bg-white p-12 rounded-lg">
+    <h1 class="text-3xl font-bold text-[#2563EB] leading-none my-12">{title}</h1>
+    <div class="grid grid-cols-4 grid-rows-2 gap-4">
+      <div class="col-span-2 row-span-2">
+        {
+          authorsList.map((author: Author) => (
+            <AuthorBadge autorID={author.id} autorName={author.name}/>
+          ))
+        }
+      </div>
+      <div class="row-span-2 col-start-4 flex justify-end">
+        <DateBadge date={date}/>
+      </div>
+
+    </div>
+    <p class="text-justify mt-1">{content}</p>
+  </article>
+</Layout>

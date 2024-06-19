@@ -1,0 +1,31 @@
+---
+import { db } from "astro:db"
+import NavLink from "../links/NavLink.astro"
+import { Users } from "astro:db"
+import { eq } from "astro:db"
+import SavedLink from "../links/SavedLink.astro"
+import PhotoLink from "../links/PhotoLink.astro"
+import FriendsLink from "../links/FriendsLink.astro"
+
+
+const session = Astro.cookies.get('userSes')
+const userId = session?.json().id
+let firstName;
+let name: string = "";
+let ppUrl: string = "";
+
+
+if (!session) {
+	//return Astro.redirect('/login');
+} else if (session) { 
+  firstName = await db.select({name : Users.firstName, profilePhoto: Users.profilePhotoURL}).from(Users).where(eq(Users.id, userId))
+
+  name = firstName[0].name || ""; // Ensure name is a string
+  ppUrl = firstName[0].profilePhoto || ""; // Ensure ppUrl is a string
+}
+---
+{
+  session
+  ? <SavedLink url={`/saved/${userId}`} name="Saved"/><FriendsLink url="/friends" name="" /><PhotoLink url={`/profile/${userId}`} photoUrl={ppUrl} idUser={userId} name={name}/>
+  : <NavLink url="/login" name="Log In"/>
+}

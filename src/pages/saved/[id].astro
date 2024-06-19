@@ -1,0 +1,26 @@
+---
+import SavedArticlesList from "@components/ui/articles/SavedArticlesList.astro";
+import Layout from "src/layouts/Layout.astro";
+
+const { id } = Astro.params;
+
+const session = Astro.cookies.get('userSes')
+if (!session) {
+	return Astro.redirect('/login');
+}
+
+const userId = session?.json().id
+
+
+// if (userId !== id) {
+//   return new Response(null, {
+//     status: 404,
+//     statusText: 'Not found'
+//   });
+// }
+---
+
+<Layout title="Saved">
+  <h1 class="mb-8">Saved Articles</h1>
+  <SavedArticlesList/>  
+</Layout>

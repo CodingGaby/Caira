@@ -1,0 +1,17 @@
+---
+import UsersList from "@components/ui/users/UsersList.astro"
+import Layout from "../layouts/Layout.astro"
+
+const session = Astro.cookies.get('userSes')
+if (!session) {
+	return Astro.redirect('/login');
+}
+
+---
+
+<Layout title="Friends">
+  <div class="flex justify-center items-center flex-col">
+		<h1>Friends</h1>
+		<UsersList/>
+	</div>
+</Layout>

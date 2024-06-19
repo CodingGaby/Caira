@@ -1,0 +1,160 @@
+---
+import Form from '@forms/Form.astro';
+import Input from '@forms/Input.astro';
+import Layout from '../layouts/Layout.astro';
+import { db, Users, isDbError } from 'astro:db';
+import type { InputFieldArr } from "@customTypes/InputType"
+import { string } from 'astro/zod';
+
+const user = Astro.cookies.get('userSes')
+const isAdminVer = user?.json().isAdmin
+
+if (!isAdminVer) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+if (Astro.request.method === 'POST') {
+	// Analizar datos de formulario
+  const formData = await Astro.request.formData();
+	
+  const enrollment = formData.get('enrollment');
+  const email = formData.get('email');
+  const firstName = formData.get('firstName');
+  const lastName = formData.get('lastName');
+	const id = crypto.randomUUID();
+	let enrollmentNumber; 
+	if (typeof enrollment === "string"){
+		enrollmentNumber = parseInt(enrollment, 10)
+	}
+
+	if (typeof email === 'string' && typeof firstName === 'string' && typeof lastName === 'string' &&  typeof id === 'string' && typeof enrollmentNumber === 'number') {
+			// Insert data from the form to the User and upload it to the DB
+			try {
+				await db.insert(Users).values({
+					id: id,
+					enrollment: enrollmentNumber,
+					email: email,
+					firstName: firstName,
+					lastName: lastName,
+				});
+			} catch (e) {
+				if (isDbError(e)) {
+					console.error(`No se puede insertar un usuario con nombre ${firstName}\n\n${e.message}`);
+					
+    		} else {
+					console.error('Se ha producido un error inesperado');
+					
+				}
+			}
+		}
+	return Astro.redirect("/")
+}
+
+
+const inputs: InputFieldArr[] = [
+	{
+		name: "email",
+		label: "Email",
+		type: "email",
+		isRequired: true,
+		placeholder: "email"
+	},
+	{
+		name: "enrollment",
+		label: "# Enrollment",
+		type: "number",
+		isRequired: true,
+		placeholder: "20106647"
+	},
+	{
+		name: "firstName",
+		label: "First Name",
+		type: "text",
+		isRequired: true,
+		placeholder: "John"
+	},
+	{
+		name: "lastName",
+		label: "Last Name",
+		type: "text",
+		isRequired: true,
+		placeholder: "Doe"
+	},
+];
+---
+
+<Layout title="Welcome to Everest">
+	<div class="flex items-center justify-center flex-col mt-10">
+		<h1 class="mb-4">Register</h1>
+		<Form btnTitle='Register'>
+			{
+				inputs.map((inp) => (
+					<Input name={inp.name} type={inp.type} isRequired={true} placeholder={inp.placeholder}>
+						{inp.label}
+					</Input>
+				))
+			}
+		</Form>
+	</div>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: black;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	.astro-a {
+		position: absolute;
+		top: -32px;
+		left: 50%;
+		transform: translatex(-50%);
+		width: 220px;
+		height: auto;
+		z-index: -1;
+	}
+	h1 {
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.instructions {
+		margin-bottom: 2rem;
+		border: 1px solid rgba(var(--accent-light), 25%);
+		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+		padding: 1.5rem;
+		border-radius: 8px;
+	}
+	.instructions code {
+		font-size: 0.8em;
+		font-weight: bold;
+		background: rgba(var(--accent-light), 12%);
+		color: rgb(var(--accent-light));
+		border-radius: 4px;
+		padding: 0.3em 0.4em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent-light));
+	}
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 2rem;
+		padding: 0;
+	}
+</style>

@@ -1,0 +1,16 @@
+---
+import CalendarIcon from "@icons/CalendarIcon.astro";
+
+
+interface Props {
+  date: string
+}
+
+
+const { date } = Astro.props;
+
+---
+
+<span class="max-w-[126px] bg-blue-100 text-blue-800 text-xs font-medium flex justify-center items-center px-2.5 py-0.5 rounded border border-blue-400">
+  <CalendarIcon/> {date}
+</span>

@@ -1,0 +1,23 @@
+---
+import DateBadge from '../articles/DateBadge.astro';
+import UserIcon from '../icons/UserIcon.astro';
+
+
+interface Props {
+	userName: string;
+  date: string;
+  ppUrl: string
+}
+
+const { userName, date, ppUrl } = Astro.props;
+---
+<a href="#" class="flex bg-white border border-gray-200 rounded-lg shadow flex-row max-w-xl hover:bg-gray-100 mt-8">
+  <div class="p-4 max-h-[140px] max-w-[140px]">
+    <UserIcon idUser='1123' photoUrl={ppUrl}/>
+  </div>
+  <div class="flex flex-col justify-between p-4 leading-normal">
+      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{userName}</h5>
+      <h6 class="mb-2 text-xl tracking-tight text-gray-900">Friend</h6>
+      <DateBadge date={date}/>
+  </div>
+</a>

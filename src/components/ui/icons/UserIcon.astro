@@ -1,0 +1,15 @@
+---
+import Image from 'astro/components/Image.astro';
+
+interface Props {
+  photoUrl: string;
+  idUser: string
+}
+
+const { photoUrl, idUser } = Astro.props;
+
+const wh = 150
+
+// Define TypeScript interface for the properties
+---
+<Image src={photoUrl} alt={`${idUser} profile photo`} width={wh} height={wh} class="rounded-full border border-gray-400"/>
