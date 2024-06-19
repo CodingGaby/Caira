@@ -1,6 +1,6 @@
-## 👀 Figma Design
+# 👀 Figma Mobile Design
 
-Feel free to check [our figma]([https://docs.astro.build](https://www.figma.com/design/JwsmwskrAMRbp3tCQuSuys/HackPuebla?t=59nXRYIa2q9XqD9E-1)).
+Feel free to check [our figma](https://www.figma.com/design/JwsmwskrAMRbp3tCQuSuys/HackPuebla?t=59nXRYIa2q9XqD9E-1).
 
 # Astro Starter Kit: Basics
 
