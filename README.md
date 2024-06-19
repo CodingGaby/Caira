@@ -1,6 +1,6 @@
 # 👀 Figma Mobile Design
 
-Feel free to check [our figma](https://www.figma.com/design/JwsmwskrAMRbp3tCQuSuys/HackPuebla?t=59nXRYIa2q9XqD9E-1).
+Feel free to check our [figma prototype](https://www.figma.com/proto/JwsmwskrAMRbp3tCQuSuys/HackPuebla?node-id=2-3&t=XwUuil07VEnBDeZN-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2%3A3&show-proto-sidebar=1).
 
 # Astro Starter Kit: Basics
 
