@@ -4,7 +4,6 @@ import Input from '@forms/Input.astro';
 import Layout from '../layouts/Layout.astro';
 import { db, Users, isDbError } from 'astro:db';
 import type { InputFieldArr } from "@customTypes/InputType"
-import { string } from 'astro/zod';
 
 const user = Astro.cookies.get('userSes')
 const isAdminVer = user?.json().isAdmin
